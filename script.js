@@ -49,15 +49,14 @@ document.addEventListener('DOMContentLoaded', () => {
 // NAVBAR SCROLL EFFECT
 // ============================================
 const navbar = document.getElementById('navbar');
-let lastScrollY = window.scrollY;
 
-window.addEventListener('scroll', () => {
+function updateNavbarOnScroll() {
     if (window.scrollY > 100) {
         navbar.classList.add('scrolled');
     } else {
         navbar.classList.remove('scrolled');
     }
-});
+}
 
 // ============================================
 // MOBILE MENU TOGGLE
@@ -122,7 +121,6 @@ function setActiveNav() {
     });
 }
 
-window.addEventListener('scroll', setActiveNav);
 
 // ============================================
 // SCROLL ANIMATIONS WITH INTERSECTION OBSERVER
@@ -271,10 +269,15 @@ function debounce(func, wait = 10, immediate = true) {
 }
 
 // Apply debounce to scroll-heavy functions
-window.addEventListener('scroll', debounce(setActiveNav, 15));
+const handleScrollEffects = debounce(() => {
+    updateNavbarOnScroll();
+    setActiveNav();
+}, 15);
+
+window.addEventListener('scroll', handleScrollEffects);
 
 // ============================================
-// PRELOAD CRITICAL RESOURCES
+// PAGE LOAD STATE MANAGEMENT
 // ============================================
 window.addEventListener('load', () => {
     // Remove any loading states or add additional animations
